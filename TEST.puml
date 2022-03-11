@@ -1,0 +1,50 @@
+@startuml
+class com.cleanup.todoc.model.Project {
+- long id
+- String name
+- int color
++ {static} Project[] getAllProjects()
++ {static} Project getProjectById(long)
++ long getId()
++ String getName()
++ int getColor()
++ String toString()
+}
+class com.cleanup.todoc.model.Task {
+- long id
+- long projectId
+- String name
+- long creationTimestamp
++ long getProjectId()
++ long getCreationTimestamp()
++ long getId()
+- void setId(long)
+- void setProjectId(long)
++ Project getProject()
++ String getName()
+- void setName(String)
+- void setCreationTimestamp(long)
+}
+class com.cleanup.todoc.model.Task.TaskAZComparator {
++ int compare(Task,Task)
+}
+class com.cleanup.todoc.model.Task.TaskZAComparator {
++ int compare(Task,Task)
+}
+class com.cleanup.todoc.model.Task.TaskRecentComparator {
++ int compare(Task,Task)
+}
+class com.cleanup.todoc.model.Task.TaskOldComparator {
++ int compare(Task,Task)
+}
+
+
+com.cleanup.todoc.model.Task +.. com.cleanup.todoc.model.Task.TaskAZComparator
+com.cleanup.todoc.model.Comparator <|.. com.cleanup.todoc.model.Task.TaskAZComparator
+com.cleanup.todoc.model.Task +.. com.cleanup.todoc.model.Task.TaskZAComparator
+com.cleanup.todoc.model.Comparator <|.. com.cleanup.todoc.model.Task.TaskZAComparator
+com.cleanup.todoc.model.Task +.. com.cleanup.todoc.model.Task.TaskRecentComparator
+com.cleanup.todoc.model.Comparator <|.. com.cleanup.todoc.model.Task.TaskRecentComparator
+com.cleanup.todoc.model.Task +.. com.cleanup.todoc.model.Task.TaskOldComparator
+com.cleanup.todoc.model.Comparator <|.. com.cleanup.todoc.model.Task.TaskOldComparator
+@enduml
