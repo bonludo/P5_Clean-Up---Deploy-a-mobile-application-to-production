@@ -1,26 +1,25 @@
-package com.cleanup.todoc.database;
+package com.cleanup.todoc.data.database;
 
+import android.content.ContentValues;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.room.Database;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.cleanup.todoc.database.dao.ProjectDao;
-import com.cleanup.todoc.database.dao.TaskDao;
-import com.cleanup.todoc.model.Project;
-import com.cleanup.todoc.model.Task;
+import com.cleanup.todoc.data.database.dao.ProjectDao;
+import com.cleanup.todoc.data.database.dao.TaskDao;
+import com.cleanup.todoc.data.database.model.Project;
+import com.cleanup.todoc.data.database.model.Task;
 
-import java.util.concurrent.Executors;
-
-@Database(entities = {Task.class, Project.class}, version = 1, exportSchema = false)
+@androidx.room.Database(entities = {Task.class, Project.class}, version = 1, exportSchema = false)
 public abstract class TaskDatabase extends RoomDatabase {
 
         // --- SINGLETON ---
 
-        private static volatile TaskDatabase INSTANCE;
+        private static TaskDatabase INSTANCE;
 
         // --- DAO ---
 
@@ -39,11 +38,8 @@ public abstract class TaskDatabase extends RoomDatabase {
                     if (INSTANCE == null) {
 
                         INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-
-                                TaskDatabase.class, "MyDatabase.db")
-
+                                TaskDatabase.class, "taskdatabase")
                                 .addCallback(prepopulateDatabase())
-
                                 .build();
 
                     }
@@ -51,28 +47,24 @@ public abstract class TaskDatabase extends RoomDatabase {
                 }
 
             }
-
             return INSTANCE;
-
         }
 
-        private static Callback prepopulateDatabase() {
-
+        private static Callback prepopulateDatabase (){
             return new Callback() {
-
                 @Override
-
                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
-
                     super.onCreate(db);
-
-                    Executors.newSingleThreadExecutor().execute(() ->
-                            INSTANCE.projectDao().createProject(new Project(1, "Philippe", "https://oc-user.imgix.net/users/avatars/15175844164713_frame_523.jpg?auto=compress,format&q=80&h=100&dpr=2")));
-
+                    Project[] projects = Project.getAllProjects();
+                    for (Project project : projects) {
+                        ContentValues contentValues = new ContentValues();
+                        contentValues.put("id",project.getId());
+                        contentValues.put("name", project.getName());
+                        contentValues.put("color",project.getColor());
+                        db.insert("Project", OnConflictStrategy.IGNORE,contentValues);
+                    }
                 }
-
             };
 
         }
-
     }
