@@ -20,7 +20,7 @@ public class ProjectRepository {
         return this.projectDao.getProjects();
     }
 
-    public LiveData<List<Project>> selectProject(long projectId) {
+    public LiveData<Project> selectProject(long projectId) {
         return this.projectDao.selectedProject(projectId);
     }
 

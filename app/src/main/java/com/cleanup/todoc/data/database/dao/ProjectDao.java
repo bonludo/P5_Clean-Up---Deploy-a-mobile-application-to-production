@@ -20,6 +20,6 @@ public interface ProjectDao {
     Void createProject(Project project);
 
     @Query("SELECT * FROM Project WHERE Id = :projectId")
-    LiveData<List<Project>> selectedProject(long projectId);
+    LiveData<Project> selectedProject(long projectId);
 }
 
