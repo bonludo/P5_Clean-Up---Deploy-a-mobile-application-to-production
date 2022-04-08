@@ -1,11 +1,16 @@
 package com.cleanup.todoc;
 
+
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner;
 import androidx.test.rule.ActivityTestRule;
 import android.view.View;
 import android.widget.TextView;
 
+
 import com.cleanup.todoc.ui.MainActivity;
 
+
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +26,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -29,10 +33,16 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
  * @author Gaëtan HERFRAY
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-@RunWith(AndroidJUnit4.class)
+@RunWith(AndroidJUnit4ClassRunner.class)
 public class MainActivityInstrumentedTest {
+
     @Rule
     public ActivityTestRule<MainActivity> rule = new ActivityTestRule<>(MainActivity.class);
+
+    @Before
+    public void before() {
+        androidx.test.core.app.ApplicationProvider.getApplicationContext().deleteDatabase("taskdatabase");
+    }
 
     @Test
     public void addAndRemoveTask() {
